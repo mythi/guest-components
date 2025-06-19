@@ -280,6 +280,7 @@ impl CompositeAttester {
                 });
                 let primary_runtime_data = serde_json::to_string(&primary_runtime_data)
                     .context("serialize runtime data failed")?;
+                log::debug!("primary_runtime_data: {primary_runtime_data}");
                 hash_algorithm.digest(primary_runtime_data.as_bytes())
             }
         };

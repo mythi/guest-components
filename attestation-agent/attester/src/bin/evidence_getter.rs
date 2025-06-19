@@ -55,7 +55,7 @@ async fn main() {
         .expect("get evidence failed");
     println!("{evidence}");
 
-    let additional_evidence = attesters
+    let additional_evidence = attester
         .additional_evidence(report_data)
         .await
         .expect("get additional evidence failed");
