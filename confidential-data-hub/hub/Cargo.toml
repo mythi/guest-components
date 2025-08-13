@@ -28,6 +28,10 @@ name = "cdh-oneshot"
 required-features = ["bin"]
 
 [[bin]]
+name = "cdh-sealed-secret-hook"
+required-features = ["oci-spec"]
+
+[[bin]]
 name = "secret"
 path = "src/bin/secret_cli.rs"
 required-features = ["cli"]
@@ -65,6 +69,7 @@ tokio = { workspace = true, features = [
 tonic = { workspace = true, optional = true }
 ttrpc = { workspace = true, features = ["async"], optional = true }
 zeroize.workspace = true
+oci-spec = { version = "0.8.1", optional = true, features = ["runtime"] }
 
 [build-dependencies]
 anyhow.workspace = true
