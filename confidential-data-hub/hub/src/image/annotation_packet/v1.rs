@@ -27,9 +27,9 @@ pub struct AnnotationPacket {
 
 impl AnnotationPacket {
     pub(crate) async fn unwrap_key(&self) -> Result<Vec<u8>> {
-        use base64::{engine::general_purpose::STANDARD, Engine};
+        use base64::{Engine, engine::general_purpose::STANDARD};
         use crypto::WrapType;
-        use kms::{plugins::VaultProvider, Annotations, ProviderSettings};
+        use kms::{Annotations, ProviderSettings, plugins::VaultProvider};
 
         let wrap_type = WrapType::try_from(&self.wrap_type[..])
             .map_err(|_| Error::UnknownWrapType(self.wrap_type.to_string()))?;

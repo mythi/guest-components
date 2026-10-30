@@ -47,7 +47,7 @@
 use std::{fs, io::Write};
 
 use crate::storage::{drivers::run_command, volume_type::blockdevice::SourceType};
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result, bail};
 use serde::{Deserialize, Serialize};
 use tracing::{debug, info, warn};
 use zeroize::Zeroizing;
@@ -94,7 +94,9 @@ impl ZfsParameters {
         source_type: SourceType,
     ) -> Result<()> {
         if !is_zfs_installed() {
-            bail!("zfs is not installed. Please install zfsutils-linux and enable the zfs module in the kernel.");
+            bail!(
+                "zfs is not installed. Please install zfsutils-linux and enable the zfs module in the kernel."
+            );
         }
 
         debug!(
@@ -106,7 +108,9 @@ impl ZfsParameters {
 
         // if the source type is empty, create a new zpool and zdataset
         if source_type == SourceType::Empty {
-            warn!("creating a new zpool and zdataset on the device. This will wipe original data on the disk.");
+            warn!(
+                "creating a new zpool and zdataset on the device. This will wipe original data on the disk."
+            );
             create_zpool(&self.pool, device_path)?;
             create_zdataset(&self.pool, &self.dataset, key, mount_point)?;
         } else {
@@ -125,7 +129,9 @@ impl ZfsParameters {
 pub fn is_zfs_installed() -> bool {
     let installed = run_command("zpool", &["list"], None).is_ok();
     if !installed {
-        warn!("zfs is not installed. Consider installing `zfsutils-linux` (ubuntu) and enable the zfs module in the kernel.");
+        warn!(
+            "zfs is not installed. Consider installing `zfsutils-linux` (ubuntu) and enable the zfs module in the kernel."
+        );
     }
     installed
 }

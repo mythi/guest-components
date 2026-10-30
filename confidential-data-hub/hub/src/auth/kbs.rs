@@ -9,11 +9,11 @@
 use std::path::PathBuf;
 
 use const_format::concatcp;
-use kms::{plugins::kbs::KbcClient, Annotations, Getter};
+use kms::{Annotations, Getter, plugins::kbs::KbcClient};
 use tokio::fs;
 use tracing::debug;
 
-use crate::{hub::Hub, hub::CDH_BASE_DIR, Error, Result};
+use crate::{Error, Result, hub::CDH_BASE_DIR, hub::Hub};
 
 /// Directory for KBS resources (credentials, etc.) fetched at init, see the `[[credentials]]`
 /// sections in CDH's `config.toml` file, for an example, see `example.config.toml`.
@@ -87,7 +87,7 @@ fn is_path_valid(path: &str) -> bool {
 mod tests {
     use rstest::rstest;
 
-    use super::{is_path_valid, KBS_RESOURCE_STORAGE_DIR};
+    use super::{KBS_RESOURCE_STORAGE_DIR, is_path_valid};
 
     #[rstest]
     #[case("/etc/config.toml".into(), false)]

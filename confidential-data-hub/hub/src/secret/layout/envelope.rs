@@ -5,7 +5,7 @@
 
 pub use kms::Annotations;
 
-use base64::{engine::general_purpose::STANDARD, Engine};
+use base64::{Engine, engine::general_purpose::STANDARD};
 use crypto::WrapType;
 use kms::ProviderSettings;
 use serde::{Deserialize, Serialize};

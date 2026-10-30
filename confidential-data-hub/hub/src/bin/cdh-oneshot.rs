@@ -7,11 +7,11 @@
 
 #![allow(non_snake_case)]
 
-use base64::{engine::general_purpose::STANDARD, Engine};
+use base64::{Engine, engine::general_purpose::STANDARD};
 use clap::{Args, Parser, Subcommand};
-use confidential_data_hub::{hub::Hub, storage::volume_type::Storage, DataHub};
+use confidential_data_hub::{DataHub, hub::Hub, storage::volume_type::Storage};
 use tracing::{debug, info, warn};
-use tracing_subscriber::{fmt::Subscriber, EnvFilter};
+use tracing_subscriber::{EnvFilter, fmt::Subscriber};
 
 mod config;
 #[derive(Parser)]

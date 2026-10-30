@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
-use anyhow::{anyhow, bail, Result};
+use anyhow::{Result, anyhow, bail};
 use serde::{Deserialize, Serialize};
 use strum::AsRefStr;
 use tracing::warn;
@@ -162,11 +162,11 @@ fn disable_lazy_itable_init(args: &[String]) -> Vec<String> {
         "defaulting ext4 lazy_itable_init=0 for LUKS2 dm-integrity; set it explicitly in mkfsOpts to override"
     );
 
-    if let Some(index) = args.iter().rposition(|arg| arg == "-E") {
-        if let Some(options) = args.get_mut(index + 1) {
-            options.push_str(",lazy_itable_init=0");
-            return args;
-        }
+    if let Some(index) = args.iter().rposition(|arg| arg == "-E")
+        && let Some(options) = args.get_mut(index + 1)
+    {
+        options.push_str(",lazy_itable_init=0");
+        return args;
     }
 
     if let Some(options) = args

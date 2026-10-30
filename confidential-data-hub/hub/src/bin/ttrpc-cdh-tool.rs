@@ -7,7 +7,7 @@
 
 #![allow(non_snake_case)]
 
-use base64::{engine::general_purpose::STANDARD, Engine};
+use base64::{Engine, engine::general_purpose::STANDARD};
 use clap::{Args, Parser, Subcommand};
 use confidential_data_hub::storage::volume_type::Storage;
 

@@ -197,22 +197,27 @@ impl CdhConfig {
 
 impl CdhConfig {
     pub fn set_configuration_envs(&self) -> Result<()> {
-        if env::var("AA_KBC_PARAMS").is_err() {
-            env::set_var(
-                "AA_KBC_PARAMS",
-                format!("{}::{}", self.kbc.name, self.kbc.url),
-            );
-        }
-        if env::var("AA_SOCKET").is_err() {
-            env::set_var("AA_SOCKET", &self.aa.aa_socket);
-        }
-        // KBS configurations
-        if let Some(kbs_cert) = &self.kbc.kbs_cert {
-            env::set_var("KBS_CERT", kbs_cert);
-        }
+        // Safety: these calls happen before any additional threads are
+        // spawned, so there is no risk of concurrent reads/writes of the
+        // process environment.
+        unsafe {
+            if env::var("AA_KBC_PARAMS").is_err() {
+                env::set_var(
+                    "AA_KBC_PARAMS",
+                    format!("{}::{}", self.kbc.name, self.kbc.url),
+                );
+            }
+            if env::var("AA_SOCKET").is_err() {
+                env::set_var("AA_SOCKET", &self.aa.aa_socket);
+            }
+            // KBS configurations
+            if let Some(kbs_cert) = &self.kbc.kbs_cert {
+                env::set_var("KBS_CERT", kbs_cert);
+            }
 
-        if self.skip_sealed_secret_verification {
-            env::set_var("SKIP_SEALED_SECRET_VERIFICATION", "true");
+            if self.skip_sealed_secret_verification {
+                env::set_var("SKIP_SEALED_SECRET_VERIFICATION", "true");
+            }
         }
 
         // Only meaningful when an RPC server exposing the KeyProvider service
@@ -237,8 +242,8 @@ mod tests {
     use serial_test::serial;
 
     use crate::{
-        config::DEFAULT_AA_SOCKET_ADDR, config::DEFAULT_CDH_SOCKET_ADDR, AaConfig, CdhConfig,
-        KbsConfig, LogConfig,
+        AaConfig, CdhConfig, KbsConfig, LogConfig, config::DEFAULT_AA_SOCKET_ADDR,
+        config::DEFAULT_CDH_SOCKET_ADDR,
     };
 
     #[rstest]

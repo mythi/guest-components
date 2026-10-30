@@ -11,7 +11,7 @@ pub mod error;
 use super::SecureMount;
 use crate::{
     secret,
-    storage::drivers::zfs::{export_zpool, ZfsParameters},
+    storage::drivers::zfs::{ZfsParameters, export_zpool},
 };
 
 use async_trait::async_trait;
@@ -289,9 +289,9 @@ mod tests {
     use tempfile::TempDir;
     use tracing::warn;
 
-    use crate::storage::drivers::luks2::{luks_header_path, Luks2Formatter};
+    use crate::storage::drivers::luks2::{Luks2Formatter, luks_header_path};
     use crate::storage::{
-        drivers::{zfs::is_zfs_installed, TempFileLoopDevice},
+        drivers::{TempFileLoopDevice, zfs::is_zfs_installed},
         tests::init_tracing,
     };
 
@@ -663,7 +663,7 @@ mod tests {
     #[cfg_attr(any(target_arch = "s390x", target_arch = "powerpc64"), ignore)]
     #[serial]
     async fn encrypt_an_empty_device_using_luks2() {
-        use rand::{distr::Alphanumeric, rng, RngExt};
+        use rand::{RngExt, distr::Alphanumeric, rng};
         use std::io::Write;
         use std::path::Path;
 
@@ -710,7 +710,7 @@ mod tests {
     #[serial]
     async fn open_pre_encrypted_device_using_luks2_with_key() {
         use crate::storage::drivers::luks2::Luks2Formatter;
-        use rand::{distr::Alphanumeric, rng, RngExt};
+        use rand::{RngExt, distr::Alphanumeric, rng};
         use std::{io::Write, path::Path};
         use zeroize::Zeroizing;
 
@@ -764,7 +764,7 @@ mod tests {
     #[cfg_attr(any(target_arch = "s390x", target_arch = "powerpc64"), ignore)]
     #[serial]
     async fn encrypt_empty_device_without_key_uses_random_key() {
-        use rand::{distr::Alphanumeric, rng, RngExt};
+        use rand::{RngExt, distr::Alphanumeric, rng};
         use std::{io::Write, path::Path};
 
         let target_device_name = format!(

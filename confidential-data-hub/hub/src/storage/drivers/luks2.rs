@@ -14,9 +14,9 @@
 use std::path::Path;
 
 use anyhow::{Context, Result};
-use base64::{engine::general_purpose::URL_SAFE_NO_PAD as b64, Engine};
+use base64::{Engine, engine::general_purpose::URL_SAFE_NO_PAD as b64};
 use const_format::concatcp;
-use nix::mount::{mount, MsFlags};
+use nix::mount::{MsFlags, mount};
 use serde::{Deserialize, Serialize};
 use tokio::fs::symlink;
 use tracing::{debug, info, warn};
@@ -358,7 +358,7 @@ mod tests {
     use serial_test::serial;
     use zeroize::Zeroizing;
 
-    use super::{luks_header_path, prepare_luks_header_file, Luks2Formatter};
+    use super::{Luks2Formatter, luks_header_path, prepare_luks_header_file};
 
     const TEST_PASSPHRASE: &[u8] = b"test";
     const NAME: &str = "test";
@@ -526,7 +526,7 @@ mod tests {
 
     #[test]
     fn prepare_luks_header_file_rejects_existing_path() {
-        use rand::{distr::Alphanumeric, rng, RngExt};
+        use rand::{RngExt, distr::Alphanumeric, rng};
 
         let path_str = format!(
             "/dev/{}",

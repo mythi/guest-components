@@ -56,7 +56,12 @@ impl CdhConfig {
             socket = %self.socket,
             "OCICRYPT_KEYPROVIDER_CONFIG unset; wrote default keyprovider config pointing at CDH"
         );
-        env::set_var(OCICRYPT_KEYPROVIDER_CONFIG_ENV, path);
+        // Safety: this happens before any additional threads are spawned, so
+        // there is no risk of concurrent reads/writes of the process
+        // environment.
+        unsafe {
+            env::set_var(OCICRYPT_KEYPROVIDER_CONFIG_ENV, path);
+        }
         Ok(())
     }
 
@@ -130,7 +135,9 @@ mod tests {
     #[test]
     #[serial]
     fn set_configuration_envs_writes_ocicrypt_config_when_unset() {
-        env::remove_var(OCICRYPT_KEYPROVIDER_CONFIG_ENV);
+        unsafe {
+            env::remove_var(OCICRYPT_KEYPROVIDER_CONFIG_ENV);
+        }
 
         let config = test_config("unix:///run/confidential-containers/cdh.sock");
         config.set_configuration_envs().unwrap();
@@ -140,14 +147,18 @@ mod tests {
         assert!(content.contains("attestation-agent"));
         assert!(content.contains(&config.socket));
 
-        env::remove_var(OCICRYPT_KEYPROVIDER_CONFIG_ENV);
+        unsafe {
+            env::remove_var(OCICRYPT_KEYPROVIDER_CONFIG_ENV);
+        }
         let _ = std::fs::remove_file(path);
     }
 
     #[test]
     #[serial]
     fn set_configuration_envs_preserves_existing_ocicrypt_config() {
-        env::set_var(OCICRYPT_KEYPROVIDER_CONFIG_ENV, "/already/set.json");
+        unsafe {
+            env::set_var(OCICRYPT_KEYPROVIDER_CONFIG_ENV, "/already/set.json");
+        }
 
         let config = test_config("unix:///tmp/other.sock");
         config.set_configuration_envs().unwrap();
@@ -156,6 +167,8 @@ mod tests {
             "/already/set.json"
         );
 
-        env::remove_var(OCICRYPT_KEYPROVIDER_CONFIG_ENV);
+        unsafe {
+            env::remove_var(OCICRYPT_KEYPROVIDER_CONFIG_ENV);
+        }
     }
 }

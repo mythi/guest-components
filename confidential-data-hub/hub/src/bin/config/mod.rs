@@ -74,16 +74,20 @@ authenticated_registry_credentials_uri = "kbs:///default/auth/1"
         );
 
         // overrided by env
-        env::set_var(
-            "CDH_DEFAULT_IMAGE_AUTHENTICATED_REGISTRY_CREDENTIALS",
-            "file:///test",
-        );
+        unsafe {
+            env::set_var(
+                "CDH_DEFAULT_IMAGE_AUTHENTICATED_REGISTRY_CREDENTIALS",
+                "file:///test",
+            );
+        }
         let (config, _) = read_config(Some(config_path.clone())).unwrap();
         assert_eq!(
             config.image.authenticated_registry_credentials_uri,
             Some("file:///test".to_string())
         );
-        env::remove_var("CDH_DEFAULT_IMAGE_AUTHENTICATED_REGISTRY_CREDENTIALS");
+        unsafe {
+            env::remove_var("CDH_DEFAULT_IMAGE_AUTHENTICATED_REGISTRY_CREDENTIALS");
+        }
 
         // no env again
         let (config, _) = read_config(Some(config_path)).unwrap();

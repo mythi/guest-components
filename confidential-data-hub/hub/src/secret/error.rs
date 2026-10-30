@@ -6,8 +6,8 @@
 use thiserror::Error;
 
 use crate::secret::{
-    layout::{envelope::EnvelopeError, vault::VaultError},
     VERSION,
+    layout::{envelope::EnvelopeError, vault::VaultError},
 };
 
 pub type Result<T> = std::result::Result<T, SecretError>;

@@ -7,8 +7,8 @@
 //! the previous version.
 
 use anyhow::anyhow;
-use base64::{engine::general_purpose::STANDARD, Engine};
-use kms::{plugins::VaultProvider, Annotations, ProviderSettings};
+use base64::{Engine, engine::general_purpose::STANDARD};
+use kms::{Annotations, ProviderSettings, plugins::VaultProvider};
 use serde::{Deserialize, Serialize};
 use serde_json::Map;
 

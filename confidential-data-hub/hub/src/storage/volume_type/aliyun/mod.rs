@@ -10,7 +10,7 @@ use std::{collections::HashMap, os::unix::fs::PermissionsExt};
 
 use anyhow::Context;
 use async_trait::async_trait;
-use rand::{distr::Alphanumeric, RngExt};
+use rand::{RngExt, distr::Alphanumeric};
 use serde::{Deserialize, Serialize};
 use tokio::{
     fs,

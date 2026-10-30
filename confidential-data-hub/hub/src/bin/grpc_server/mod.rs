@@ -7,10 +7,10 @@ use anyhow::*;
 
 use confidential_data_hub::{
     storage::volume_type::Storage,
-    {hub::Hub, DataHub},
+    {DataHub, hub::Hub},
 };
 use std::{error::Error as _, net::SocketAddr, sync::Arc};
-use tonic::{transport::Server, Request, Response, Status};
+use tonic::{Request, Response, Status, transport::Server};
 use tracing::{debug, error};
 
 use crate::{
@@ -19,16 +19,16 @@ use crate::{
 };
 use protos::grpc::cdh::{
     api::{
+        GetResourceRequest, GetResourceResponse, ImagePullRequest, ImagePullResponse,
+        SecureMountRequest, SecureMountResponse, UnsealSecretInput, UnsealSecretOutput,
         get_resource_service_server::{GetResourceService, GetResourceServiceServer},
         image_pull_service_server::{ImagePullService, ImagePullServiceServer},
         sealed_secret_service_server::{SealedSecretService, SealedSecretServiceServer},
         secure_mount_service_server::{SecureMountService, SecureMountServiceServer},
-        GetResourceRequest, GetResourceResponse, ImagePullRequest, ImagePullResponse,
-        SecureMountRequest, SecureMountResponse, UnsealSecretInput, UnsealSecretOutput,
     },
     keyprovider::{
-        key_provider_service_server::{KeyProviderService, KeyProviderServiceServer},
         KeyProviderKeyWrapProtocolInput, KeyProviderKeyWrapProtocolOutput,
+        key_provider_service_server::{KeyProviderService, KeyProviderServiceServer},
     },
 };
 

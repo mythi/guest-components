@@ -10,9 +10,9 @@ use clap::Parser;
 use confidential_data_hub::hub::Hub;
 use const_format::concatcp;
 use shadow_rs::shadow;
-use tokio::signal::unix::{signal, SignalKind};
+use tokio::signal::unix::{SignalKind, signal};
 use tracing::{debug, info};
-use tracing_subscriber::{fmt::Subscriber, EnvFilter};
+use tracing_subscriber::{EnvFilter, fmt::Subscriber};
 
 shadow!(build);
 

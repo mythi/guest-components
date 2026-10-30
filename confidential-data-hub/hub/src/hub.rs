@@ -22,7 +22,7 @@ use protos::ttrpc::aa::attestation_agent::{
 use protos::ttrpc::aa::attestation_agent_ttrpc::AttestationAgentServiceClient;
 
 use crate::storage::volume_type::Storage;
-use crate::{image, secret, CdhConfig, DataHub, Error, Result};
+use crate::{CdhConfig, DataHub, Error, Result, image, secret};
 
 pub struct Hub {
     #[allow(dead_code)]
@@ -130,7 +130,9 @@ impl DataHub for Hub {
                 .await?;
 
             let Some(aa_client) = aa_client else {
-                warn!("Attestation Agent socket file not found, so all runtime measurement extension will be skipped.");
+                warn!(
+                    "Attestation Agent socket file not found, so all runtime measurement extension will be skipped."
+                );
                 return Ok(image_info.manifest_digest);
             };
 
@@ -164,10 +166,14 @@ impl DataHub for Hub {
                     info!("image pull event extended runtime measurement successfully");
                 }
                 RuntimeMeasurementResult::NOT_SUPPORTED => {
-                    warn!("Current platform does not support runtime measurement, skipping runtime measurement extension.")
+                    warn!(
+                        "Current platform does not support runtime measurement, skipping runtime measurement extension."
+                    )
                 }
                 RuntimeMeasurementResult::NOT_ENABLED => {
-                    warn!("Runtime measurement is not enabled in Attestation Agent configuration, skipping runtime measurement extension.")
+                    warn!(
+                        "Runtime measurement is not enabled in Attestation Agent configuration, skipping runtime measurement extension."
+                    )
                 }
             }
         }

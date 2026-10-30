@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use assert_cmd::Command;
-use base64::{engine::general_purpose::STANDARD, Engine};
+use base64::{Engine, engine::general_purpose::STANDARD};
 use serde_json::Value;
 use std::collections::HashMap;
 use tempfile::TempDir;

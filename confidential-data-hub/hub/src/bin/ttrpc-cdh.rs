@@ -5,7 +5,7 @@
 
 use std::{path::Path, sync::Arc};
 
-use anyhow::{anyhow, Context, Result};
+use anyhow::{Context, Result, anyhow};
 use clap::Parser;
 use const_format::concatcp;
 use tracing::{debug, info};
@@ -20,9 +20,9 @@ use protos::ttrpc::cdh::{
 use shadow_rs::shadow;
 use tokio::{
     fs,
-    signal::unix::{signal, SignalKind},
+    signal::unix::{SignalKind, signal},
 };
-use tracing_subscriber::{fmt::Subscriber, EnvFilter};
+use tracing_subscriber::{EnvFilter, fmt::Subscriber};
 use ttrpc::r#async::Server as TtrpcServer;
 use ttrpc_server::Server;
 

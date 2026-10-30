@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
-use crate::{hub::Hub, Result};
+use crate::{Result, hub::Hub};
 
 #[cfg(feature = "kbs")]
 mod kbs;

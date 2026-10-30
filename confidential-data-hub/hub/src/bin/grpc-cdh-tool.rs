@@ -7,18 +7,18 @@
 
 #![allow(non_snake_case)]
 
-use base64::{engine::general_purpose::STANDARD, Engine};
+use base64::{Engine, engine::general_purpose::STANDARD};
 use clap::{Args, Parser, Subcommand};
 use confidential_data_hub::storage::volume_type::Storage;
 use protos::grpc::cdh::{
     api::{
+        GetResourceRequest, SecureMountRequest, UnsealSecretInput,
         get_resource_service_client::GetResourceServiceClient,
         sealed_secret_service_client::SealedSecretServiceClient,
-        secure_mount_service_client::SecureMountServiceClient, GetResourceRequest,
-        SecureMountRequest, UnsealSecretInput,
+        secure_mount_service_client::SecureMountServiceClient,
     },
     keyprovider::{
-        key_provider_service_client::KeyProviderServiceClient, KeyProviderKeyWrapProtocolInput,
+        KeyProviderKeyWrapProtocolInput, key_provider_service_client::KeyProviderServiceClient,
     },
 };
 

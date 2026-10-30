@@ -8,13 +8,13 @@ use p256::elliptic_curve::sec1::ToEncodedPoint;
 use std::{env, path::Path};
 
 use base64::{
-    engine::general_purpose::{STANDARD, URL_SAFE_NO_PAD},
     Engine,
+    engine::general_purpose::{STANDARD, URL_SAFE_NO_PAD},
 };
 use clap::{Args, Parser, Subcommand};
 use confidential_data_hub::secret::{
-    layout::{envelope::EnvelopeSecret, vault::VaultSecret},
     Secret, SecretContent, VERSION,
+    layout::{envelope::EnvelopeSecret, vault::VaultSecret},
 };
 use crypto::WrapType;
 #[cfg(feature = "aliyun")]
@@ -215,23 +215,27 @@ async fn unseal_secret(unseal_args: &UnsealArgs) {
         SecretContent::Vault(ref vault) => vault.provider.clone(),
     };
 
-    match secret_provider.as_str() {
-        "aliyun" => env::set_var(
-            "ALIYUN_IN_GUEST_KEY_PATH",
-            unseal_args.key_path.as_ref().expect("Key Path Required"),
-        ),
-        "aws" => env::set_var(
-            "AWS_IN_GUEST_KEY_PATH",
-            unseal_args.key_path.as_ref().expect("Key Path Required"),
-        ),
-        "kbs" => env::set_var(
-            "AA_KBC_PARAMS",
-            unseal_args
-                .aa_kbc_params
-                .as_ref()
-                .expect("aa_kbc_params Required"),
-        ),
-        _ => {}
+    // Safety: this is a single-threaded CLI tool running at startup, so there
+    // is no risk of concurrent reads/writes of the process environment.
+    unsafe {
+        match secret_provider.as_str() {
+            "aliyun" => env::set_var(
+                "ALIYUN_IN_GUEST_KEY_PATH",
+                unseal_args.key_path.as_ref().expect("Key Path Required"),
+            ),
+            "aws" => env::set_var(
+                "AWS_IN_GUEST_KEY_PATH",
+                unseal_args.key_path.as_ref().expect("Key Path Required"),
+            ),
+            "kbs" => env::set_var(
+                "AA_KBC_PARAMS",
+                unseal_args
+                    .aa_kbc_params
+                    .as_ref()
+                    .expect("aa_kbc_params Required"),
+            ),
+            _ => {}
+        }
     }
 
     // Unseal the secret

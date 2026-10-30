@@ -9,10 +9,10 @@ use anyhow::Result;
 use async_trait::async_trait;
 use confidential_data_hub::{
     storage::volume_type::Storage,
-    {hub::Hub, CdhConfig, DataHub},
+    {CdhConfig, DataHub, hub::Hub},
 };
 use tracing::{debug, error};
-use ttrpc::{asynchronous::TtrpcContext, Code, Error, Status};
+use ttrpc::{Code, Error, Status, asynchronous::TtrpcContext};
 
 use protos::ttrpc::cdh::{
     api::{

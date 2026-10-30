@@ -6,13 +6,13 @@
 pub mod error;
 pub mod layout;
 
-use base64::{engine::general_purpose::URL_SAFE_NO_PAD as b64, Engine};
+use base64::{Engine, engine::general_purpose::URL_SAFE_NO_PAD as b64};
 use const_format::concatcp;
 use jose_jwa::Signing;
 use jose_jwk::{EcCurves, Jwk};
 use jose_jws::{Flattened, Protected, Unprotected};
-use p256::ecdsa::{signature::Signer, SigningKey};
-use p256::ecdsa::{signature::Verifier, Signature, VerifyingKey};
+use p256::ecdsa::{Signature, VerifyingKey, signature::Verifier};
+use p256::ecdsa::{SigningKey, signature::Signer};
 use serde::{Deserialize, Serialize};
 use std::fs;
 
@@ -201,7 +201,7 @@ impl Secret {
             _ => {
                 return Err(SecretError::BadSigningKey(
                     "Key must be EC P256 private key",
-                ))
+                ));
             }
         };
 
@@ -242,7 +242,7 @@ mod tests {
         vault::{Annotations, ProviderSettings, VaultSecret},
     };
 
-    use super::{Secret, SecretContent, SIGNING_CREDENTIALS_PATH};
+    use super::{SIGNING_CREDENTIALS_PATH, Secret, SecretContent};
 
     #[rstest]
     #[case(include_str!("./tests/envelope-1.json"), Secret {
@@ -344,9 +344,11 @@ mod tests {
         }
         let secret_string = chars.into_iter().collect();
 
-        assert!(Secret::from_signed_base64_string(secret_string, false)
-            .await
-            .is_err());
+        assert!(
+            Secret::from_signed_base64_string(secret_string, false)
+                .await
+                .is_err()
+        );
     }
 
     // Negative test to check a signature with the wrong key.
@@ -379,9 +381,11 @@ mod tests {
             .to_signed_base64_string(jwk2, kid)
             .expect("serialization failed");
 
-        assert!(Secret::from_signed_base64_string(secret_string, false)
-            .await
-            .is_err());
+        assert!(
+            Secret::from_signed_base64_string(secret_string, false)
+                .await
+                .is_err()
+        );
     }
 
     #[rstest]
